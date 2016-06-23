@@ -113,25 +113,28 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
-      var newArray = [];
-      var subArray = [];
-      var sortedArray = array.sort(function(a, b){return a-b});
-    for (var i=0; i<sortedArray.length; i++) {
-        var item = sortedArray[i];
-        subArray = sortedArray.slice(i+1);
-        if (subArray.indexOf(item) == -1) {
-          newArray.push(item);
-        }
-      } return newArray;
-    };
+        var newArray = [];
+        for (var i=0; i<array.length; i++) {
+                if (_.indexOf(newArray, array[i]) == -1) {
+                        newArray.push(array[i]);
+                }
+        }
+        return newArray;
+};
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
     // map() is a useful primitive iteration function that works a lot
     // like each(), but in addition to running the operation on all
     // the members, it also maintains an array of results.
+    var newArray = [];
+    for (var i=0; i<collection.length; i++) {
+    newArray.push(iterator(collection[i]))
+    }
+    return newArray; 
   };
-         
+
+
   /*
    * TIP: map is really handy when you want to transform an array of
    * values into a new array of values. _.pluck() is solved for you
@@ -171,7 +174,24 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
-  };
+    var total = 0;
+    var previousCall = 0;
+    if (accumulator == undefined) {
+      var newAccumulator = collection[0];
+      for (var i=1; i<collection.length; i++) {
+        previousCall = iterator(newAccumulator, collection[i]);
+        newAccumulator = previousCall;
+      }
+     return newAccumulator;
+    }
+    else {
+        for (var i=0; i<collection.length; i++) {
+        previousCall = iterator(accumulator, collection[i]);
+        accumulator = previousCall;
+    }
+    return accumulator; 
+  }
+};
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
