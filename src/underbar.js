@@ -175,40 +175,40 @@
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
     var previousCall = 0;
-    if (accumulator == undefined) {
-      var newAccumulator = collection[0];
-      for (var i=1; i<collection.length; i++) {
-        previousCall = iterator(newAccumulator, collection[i]);
-        newAccumulator = previousCall;
-      }
-     return newAccumulator;
-    }
-    else {
+    if (Array.isArray(collection)) {
+      if (accumulator == undefined) {
+        var newAccumulator = collection[0];
+        for (var i=1; i<collection.length; i++) {
+          previousCall = iterator(newAccumulator, collection[i]);
+          newAccumulator = previousCall;
+        }
+        return newAccumulator;
+      } else {
         for (var i=0; i<collection.length; i++) {
-        previousCall = iterator(accumulator, collection[i]);
+          previousCall = iterator(accumulator, collection[i]);
+          accumulator = previousCall;
+        }
+        return accumulator; 
+      }
+    } else {
+      for (var key in collection) {
+        previousCall = iterator(accumulator, collection[key]);
         accumulator = previousCall;
+      }
+      return accumulator;
     }
-    return accumulator; 
-  }
 };
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-
-      if (Array.isArray(collection)) {
         return _.reduce(collection, function(wasFound, item) {
           if (wasFound) {
             return true;
           }
           return item === target;
         }, false);
-      }
-// stuck here. not sure how to make it different so that it works for objects too
-      else {
-      
-      }
 };
 
 
